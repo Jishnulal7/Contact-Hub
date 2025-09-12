@@ -119,33 +119,4 @@ A modern, feature-rich contact management application built with Flutter and Sup
 
 ## 📱 Screenshots
 
-*Add screenshots of your app here*
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📞 Support
-
-- **Email**: your.email@example.com
-- **Issues**: [GitHub Issues](https://github.com/yourusername/contact_hub/issues)
-- **Documentation**: [Wiki](https://github.com/yourusername/contact_hub/wiki)
-
-## 🙏 Acknowledgments
-
-- Flutter team for the amazing framework
-- Supabase team for the excellent BaaS platform
-- Material Design team for design guidelines
-- Open source community for inspiration
-
----
-
-**Built with ❤️ using Flutter and Supabase**
