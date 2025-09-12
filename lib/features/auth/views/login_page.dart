@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      // backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Contact Hub',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: theme.primaryColor,
+                        // color: theme.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -148,10 +148,29 @@ class _LoginPageState extends State<LoginPage> {
                                   ? null
                                   : () async {
                                       if (_formKey.currentState!.validate()) {
-                                        await auth.signIn(
-                                          emailCtrl.text.trim(),
-                                          passCtrl.text,
-                                        );
+                                        try {
+                                          await auth.signIn(
+                                            emailCtrl.text.trim(),
+                                            passCtrl.text,
+                                          );
+
+                                          if (auth.isAuthenticated && mounted) {
+                                            Navigator.pushReplacementNamed(
+                                              context,
+                                              '/contacts',
+                                            );
+                                          }
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Sign in failed: $e',
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       }
                                     },
                               style: ElevatedButton.styleFrom(

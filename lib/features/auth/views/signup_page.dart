@@ -33,7 +33,6 @@ class _SignupPageState extends State<SignupPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -67,7 +66,6 @@ class _SignupPageState extends State<SignupPage> {
                       'Contact Hub',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: theme.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -79,6 +77,29 @@ class _SignupPageState extends State<SignupPage> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 32),
+
+                    if (auth.error != null)
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.red[50],
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.red[200]!),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.error_outline, color: Colors.red[600]),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                auth.error!,
+                                style: TextStyle(color: Colors.red[600]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                     Form(
                       key: _formKey,
@@ -197,11 +218,46 @@ class _SignupPageState extends State<SignupPage> {
                               onPressed: auth.loading
                                   ? null
                                   : () async {
+                                      print('Sign up button pressed');
+                                      print('Email: ${emailCtrl.text.trim()}');
+                                      print(
+                                        'Password length: ${passCtrl.text.length}',
+                                      );
+
                                       if (_formKey.currentState!.validate()) {
-                                        await auth.signUp(
-                                          emailCtrl.text.trim(),
-                                          passCtrl.text,
-                                        );
+                                        print('Form validation passed');
+                                        try {
+                                          await auth.signUp(
+                                            emailCtrl.text.trim(),
+                                            passCtrl.text,
+                                          );
+                                          print('SignUp method completed');
+
+                                          if (auth.error == null &&
+                                              !auth.loading) {
+                                            if (context.mounted) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'Account created successfully! Please check your email for verification.',
+                                                  ),
+                                                  backgroundColor: Colors.green,
+                                                ),
+                                              );
+
+                                              Navigator.pushReplacementNamed(
+                                                context,
+                                                '/login',
+                                              );
+                                            }
+                                          }
+                                        } catch (e) {
+                                          print('Error in signup: $e');
+                                        }
+                                      } else {
+                                        print('Form validation failed');
                                       }
                                     },
                               style: ElevatedButton.styleFrom(
@@ -268,10 +324,7 @@ class _SignupPageState extends State<SignupPage> {
                           },
                           child: Text(
                             'Sign In',
-                            style: TextStyle(
-                              color: theme.primaryColor,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],

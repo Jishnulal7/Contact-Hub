@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(AuthRepository(client)),
         ),
-        // Add ContactsProvider here so it's available throughout the app
         ChangeNotifierProvider(
           create: (_) => ContactsProvider(ContactRepository(client)),
         ),
@@ -35,7 +34,6 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer2<ThemeProvider, AuthProvider>(
         builder: (context, theme, auth, child) {
-          // Load contacts when user is authenticated
           if (auth.isAuthenticated) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               context.read<ContactsProvider>().load();
@@ -57,9 +55,7 @@ class MyApp extends StatelessWidget {
 
   Widget _getHomePage(AuthProvider auth) {
     if (auth.loading && auth.user == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (auth.isAuthenticated) {
@@ -70,7 +66,6 @@ class MyApp extends StatelessWidget {
   }
 
   Route<dynamic>? _generateRoute(RouteSettings settings, AuthProvider auth) {
-    // If user is not authenticated, only allow auth routes
     if (!auth.isAuthenticated) {
       switch (settings.name) {
         case '/signup':
@@ -86,9 +81,7 @@ class MyApp extends StatelessWidget {
       case '/contacts':
         return MaterialPageRoute(builder: (_) => const ContactsPage());
       case '/add-contact':
-        return MaterialPageRoute(
-          builder: (_) => const AddEditContactPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const AddEditContactPage());
       case '/edit-contact':
         final contact = settings.arguments as Contact?;
         return MaterialPageRoute(
@@ -103,4 +96,3 @@ class MyApp extends StatelessWidget {
     }
   }
 }
-
